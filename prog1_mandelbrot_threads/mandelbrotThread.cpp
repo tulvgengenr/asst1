@@ -44,7 +44,7 @@ void workerThreadStart(WorkerArgs * const args) {
         args->threadId * args->height / args->numThreads, 
         args->height / args->numThreads, args->maxIterations, 
         args->output);
-    printf("Hello world from thread %d\n", args->threadId);
+    // printf("Hello world from thread %d\n", args->threadId);
 }
 
 //

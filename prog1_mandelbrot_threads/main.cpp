@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <algorithm>
 #include <getopt.h>
+#include <fstream>
+#include <iostream>
 
 #include "CycleTimer.h"
 
@@ -66,12 +68,33 @@ bool verifyResult (int *gold, int *result, int width, int height) {
     return 1;
 }
 
+void clearCache() {
+    const std::string filePath = "/dev/null";
+    const std::streamsize bufferSize = 1024 * 1024; // 1MB
+
+    std::ifstream input(filePath, std::ios::binary);
+    if (!input) {
+        std::cerr << "Failed to open the file." << std::endl;
+        return;
+    }
+
+    char buffer[bufferSize];
+    while (input.read(buffer, bufferSize))
+    {
+        // 读取文件内容并忽略
+    }
+    input.close();
+}
+
+
 int main(int argc, char** argv) {
+
+    clearCache();
 
     const unsigned int width = 1600;
     const unsigned int height = 1200;
     const int maxIterations = 256;
-    int numThreads = 2;
+    int numThreads = 4;
 
     float x0 = -2;
     float x1 = 1;

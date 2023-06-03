@@ -42,7 +42,8 @@ void workerThreadStart(WorkerArgs * const args) {
         args->width, 
         args->height, 
         args->threadId * args->height / args->numThreads, 
-        args->height / args->numThreads, args->maxIterations, 
+        args->height / args->numThreads, 
+        args->maxIterations, 
         args->output);
     // printf("Hello world from thread %d\n", args->threadId);
 }
@@ -58,7 +59,7 @@ void mandelbrotThread(
     int width, int height,
     int maxIterations, int output[])
 {
-    static constexpr int MAX_THREADS = 32;
+    static constexpr int MAX_THREADS = 96 * 2;
 
     if (numThreads > MAX_THREADS)
     {

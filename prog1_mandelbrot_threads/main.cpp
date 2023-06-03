@@ -89,11 +89,11 @@ void clearCache() {
 
 int main(int argc, char** argv) {
 
-
+    
     const unsigned int width = 1600;
     const unsigned int height = 1200;
     const int maxIterations = 256;
-    int numThreads = 10;
+    int numThreads = 3;
 
     float x0 = -2;
     float x1 = 1;

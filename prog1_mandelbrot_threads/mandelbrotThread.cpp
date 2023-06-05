@@ -15,10 +15,11 @@ typedef struct {
 } WorkerArgs;
 
 
-extern void mandelbrotSerial(
+extern void mandelbrotSerialNew(
     float x0, float y0, float x1, float y1,
     int width, int height,
-    int startRow, int numRows,
+    int threadId,
+    int threadNum,
     int maxIterations,
     int output[]);
 
@@ -35,15 +36,15 @@ void workerThreadStart(WorkerArgs * const args) {
     // program that uses two threads, thread 0 could compute the top
     // half of the image and thread 1 could compute the bottom half.
     double startTime = CycleTimer::currentSeconds();
-    mandelbrotSerial(
+    mandelbrotSerialNew(
         args->x0, 
         args->y0, 
         args->x1, 
         args->y1, 
         args->width, 
         args->height, 
-        args->threadId * args->height / args->numThreads, 
-        args->height / args->numThreads, 
+        args->threadId,
+        args->numThreads,
         args->maxIterations, 
         args->output);
     double endTime = CycleTimer::currentSeconds();

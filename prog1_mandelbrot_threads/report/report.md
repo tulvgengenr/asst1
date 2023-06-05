@@ -85,4 +85,25 @@ Thread 0 time: 97.200 ms
 
 ## 1.4
 
+假设有n个线程，对于第i个线程，其计算任务的row为k*n+i。
 
+在8个线程的情况下，基本实现了不同线程的均衡负载：
+
+```shell
+Thread 3 time: 81.269 ms
+Thread 5 time: 81.282 ms
+Thread 1 time: 81.952 ms
+Thread 4 time: 82.193 ms
+Thread 2 time: 82.448 ms
+Thread 0 time: 82.405 ms
+Thread 6 time: 82.519 ms
+Thread 7 time: 82.500 ms
+```
+
+但是加速比没有达到7x，采用 https://github.com/PKUFlyingPig/asst1 的代码也没有达到7x的加速比，推测是机器的问题，还需要其他的优化。
+
+## 1.5
+
+由于本人机器的物理核心数为6，且支持超线程，因此对比了12线程和24线程的性能。
+
+24线程并没有明显高于12线程。

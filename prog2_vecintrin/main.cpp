@@ -249,7 +249,46 @@ void clampedExpVector(float* values, int* exponents, float* output, int N) {
   // Your solution should work for any value of
   // N and VECTOR_WIDTH, not just when VECTOR_WIDTH divides N
   //
-  
+  int i;
+  __cs149_vec_float val, maxFloat;
+  __cs149_vec_int exp, zeroInt, countInt, oneInt;
+  __cs149_vec_float result;
+  __cs149_mask maskAll;
+
+  for (i=0; i+VECTOR_WIDTH <=N; i+=VECTOR_WIDTH) {
+    maskAll = _cs149_init_ones();
+
+    _cs149_vload_float(val, values+i, maskAll); // float x = values[i]
+    _cs149_vload_int(exp, exponents+i, maskAll); // int y = exponents[i]
+    // exp == 0
+    zeroInt = _cs149_vset_int(0);
+    _cs149_veq_int(maskAll, exp, zeroInt, maskAll); // =0 -> 1 if y == 0
+    _cs149_vset_float(result, 1.f, maskAll);// { output[i] = 1.f }
+    maskAll = _cs149_mask_not(maskAll); // !=0 -> 1 else
+    
+    // exp != 0
+    oneInt = _cs149_vset_int(1); 
+    _cs149_vmove_float(result, val, maskAll);// float result = x
+    _cs149_vsub_int(countInt, exp, oneInt, maskAll); // int count = y - 1
+    _cs149_vgt_int(maskAll, countInt, zeroInt, maskAll); // >0 -> 1 count > 0
+    while (_cs149_cntbits(maskAll) != 0) {
+      // printf("i'm flag\n");
+      _cs149_vmult_float(result, result, val, maskAll); // result *= x
+      _cs149_vsub_int(countInt, countInt, oneInt, maskAll); // count--
+      _cs149_vgt_int(maskAll, countInt, zeroInt, maskAll); // >0 -> 1 count > 0
+    }
+    maskAll = _cs149_init_ones(); // * -> 1
+    maxFloat = _cs149_vset_float(9.999999f);
+    _cs149_vgt_float(maskAll, result, maxFloat, maskAll); // >9.999999f -> 1
+    _cs149_vset_float(result, 9.999999f, maskAll);
+    maskAll = _cs149_init_ones();
+    _cs149_vstore_float(output+i, result, maskAll);
+    // CS149Logger.printLog();
+  }
+  if (i!=N) {
+    clampedExpSerial(values+i, exponents+i, output+i, N-i);
+  }
+
 }
 
 // returns the sum of all elements in values
